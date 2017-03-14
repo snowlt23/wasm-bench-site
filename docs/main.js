@@ -1,20 +1,22 @@
 ﻿
 let benchCount = 1;
+function appendBenchResult(language, n, elapsed) {
+    const resultTableElem = document.getElementById('result-table');
+    const elem = document.createElement('tr');
+    elem.innerHTML += `<th scope="row">${benchCount}</th>`
+    elem.innerHTML += `<td>${language}</td>`;
+    elem.innerHTML += `<td>${n}</td>`;
+    elem.innerHTML += `<td>${elapsed}</td>`;
+    resultTableElem.appendChild(elem);
+    benchCount += 1;
+}
+
 function benchmarkMain(language, n, script) {
     const start = Date.now();
     script.addEventListener('load', () => {
         const end = Date.now();
         const elapsed = (end - start) / 1000;
-        
-        const resultTableElem = document.getElementById('result-table');
-        const elem = document.createElement('tr');
-        elem.innerHTML += `<th scope="row">${benchCount}</th>`
-        elem.innerHTML += `<td>${language}</td>`;
-        elem.innerHTML += `<td>${n}</td>`;
-        elem.innerHTML += `<td>${elapsed}</td>`
-        resultTableElem.appendChild(elem);
-
-        benchCount += 1;
+        appendBenchResult(language, n, elapsed);
     });
     document.body.appendChild(script);
 }
@@ -48,6 +50,24 @@ function loadWasm(wasmurl, jsurl, n) {
 function getN() {
     return document.getElementById('n-number').value;
 }
+
+function fibonacci(n) {
+    if (n <= 1) {
+        return 1;
+    } else {
+        return fibonacci(n - 1) + fibonacci(n - 2);
+    }
+}
+
+const jsRunbtn = document.getElementById('run-js');
+jsRunbtn.addEventListener('click', event => {
+    const n = getN();
+    const start = Date.now();
+    console.log(`fibonacci(${n}) = ${fibonacci(n)}`);
+    const end = Date.now();
+    const elapsed = (end - start) / 1000;
+    appendBenchResult("JS", n, elapsed);
+});
 
 const cRunbtn = document.getElementById('run-c');
 cRunbtn.addEventListener('click', event => {
