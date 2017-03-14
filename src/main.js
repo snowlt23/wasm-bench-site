@@ -1,5 +1,5 @@
 ﻿
-let benchCount = 0;
+let benchCount = 1;
 function benchmarkMain(language, n, script) {
     const start = Date.now();
     script.addEventListener('load', () => {
