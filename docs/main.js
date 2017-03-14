@@ -1,4 +1,6 @@
 ﻿
+const baseurl = "https://snowlt23.github.io/wasm-bench-site";
+
 let benchCount = 0;
 function benchmarkMain(language, n, script) {
     const start = Date.now();

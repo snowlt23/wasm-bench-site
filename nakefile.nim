@@ -3,7 +3,11 @@ import nake
 import os
 import ospaths
 
-proc exe(path: string): string = path.addFileExt(ExeExt)
+proc exe*(path: string): string = path.addFileExt(ExeExt)
+
+var baseurl = ""
+proc setBaseURL*(url: string) = baseurl = url
+proc replaceBaseURL*(s: string): string = s.replace("${baseurl}", baseurl)
 
 task "build-c", "":
   discard execShellCmd "emcc -O3 -s WASM=1 -o ./docs/fib-c-wasm.js benchmark/fibonacci.c"
@@ -21,13 +25,21 @@ task "build-nim", "":
 task "clone-pages", "":
   for path in walkFiles("./src/*"):
     let (dir, name, ext) = path.splitFile()
-    copyFile path, "docs" / name & ext
+    let src = readFile(path).replaceBaseURL()
+    writeFile "docs" / name & ext, src
 
 task "build", "":
   runTask "build-c"
   runTask "build-rust"
   runTask "build-nim"
   runTask "clone-pages"
+
+task "github-build", "":
+  setBaseURL "https://snowlt23.github.io/wasm-bench-site"
+  runTask "build"
+
+task "local-build", "":
+  runTask "build"
 
 task "server", "":
   discard execShellCmd "nim c -r -d:release local_server.nim"

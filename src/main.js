@@ -1,4 +1,6 @@
 ﻿
+const baseurl = "${baseurl}";
+
 let benchCount = 0;
 function benchmarkMain(language, n, script) {
     const start = Date.now();
