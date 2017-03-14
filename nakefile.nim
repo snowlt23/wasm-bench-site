@@ -6,7 +6,7 @@ import ospaths
 proc exe(path: string): string = path.addFileExt(ExeExt)
 
 task "build-c", "":
-  discard execShellCmd "emcc -o ./docs/fib-c-wasm.js -O3 -s WASM=1 --post-js benchmark/c-post.js benchmark/fibonacci.c"
+  discard execShellCmd "emcc -O3 -s WASM=1 -o ./docs/fib-c-wasm.js benchmark/fibonacci.c"
   discard execShellCmd "gcc -o ./dist/fib-c -O3 benchmark/fibonacci.c"
 
 task "build-rust", "":
