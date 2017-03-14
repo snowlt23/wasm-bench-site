@@ -1,2 +1,0 @@
-﻿
-// window.CWasmModule = Module;
