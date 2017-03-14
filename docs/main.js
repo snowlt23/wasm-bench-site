@@ -1,6 +1,4 @@
 ﻿
-const baseurl = "https://snowlt23.github.io/wasm-bench-site";
-
 let benchCount = 0;
 function benchmarkMain(language, n, script) {
     const start = Date.now();
@@ -54,7 +52,7 @@ function getN() {
 const cRunbtn = document.getElementById('run-c');
 cRunbtn.addEventListener('click', event => {
     const n = getN();
-    loadWasm('/fib-c-wasm.wasm', '/fib-c-wasm.js', n)
+    loadWasm('https://snowlt23.github.io/wasm-bench-site/fib-c-wasm.wasm', 'https://snowlt23.github.io/wasm-bench-site/fib-c-wasm.js', n)
         .then(script => {
             benchmarkMain('C', n, script); 
         });
@@ -63,7 +61,7 @@ cRunbtn.addEventListener('click', event => {
 const rustRunbtn = document.getElementById('run-rust');
 rustRunbtn.addEventListener('click', event => {
     const n = getN();
-    loadWasm('/fib-rust-wasm.wasm', '/fib-rust-wasm.js', n)
+    loadWasm('https://snowlt23.github.io/wasm-bench-site/fib-rust-wasm.wasm', 'https://snowlt23.github.io/wasm-bench-site/fib-rust-wasm.js', n)
         .then(script => {
             benchmarkMain('Rust', n, script); 
         });
@@ -72,7 +70,7 @@ rustRunbtn.addEventListener('click', event => {
 const nimRunbtn = document.getElementById('run-nim');
 nimRunbtn.addEventListener('click', event => {
     const n = getN();
-    loadWasm('/fib-nim-wasm.wasm', '/fib-nim-wasm.js', n)
+    loadWasm('https://snowlt23.github.io/wasm-bench-site/fib-nim-wasm.wasm', 'https://snowlt23.github.io/wasm-bench-site/fib-nim-wasm.js', n)
         .then(script => {
             benchmarkMain('Nim', n, script); 
         });

@@ -1,6 +1,4 @@
 ﻿
-const baseurl = "${baseurl}";
-
 let benchCount = 0;
 function benchmarkMain(language, n, script) {
     const start = Date.now();
@@ -54,7 +52,7 @@ function getN() {
 const cRunbtn = document.getElementById('run-c');
 cRunbtn.addEventListener('click', event => {
     const n = getN();
-    loadWasm('/fib-c-wasm.wasm', '/fib-c-wasm.js', n)
+    loadWasm('${baseurl}/fib-c-wasm.wasm', '${baseurl}/fib-c-wasm.js', n)
         .then(script => {
             benchmarkMain('C', n, script); 
         });
@@ -63,7 +61,7 @@ cRunbtn.addEventListener('click', event => {
 const rustRunbtn = document.getElementById('run-rust');
 rustRunbtn.addEventListener('click', event => {
     const n = getN();
-    loadWasm('/fib-rust-wasm.wasm', '/fib-rust-wasm.js', n)
+    loadWasm('${baseurl}/fib-rust-wasm.wasm', '${baseurl}/fib-rust-wasm.js', n)
         .then(script => {
             benchmarkMain('Rust', n, script); 
         });
@@ -72,7 +70,7 @@ rustRunbtn.addEventListener('click', event => {
 const nimRunbtn = document.getElementById('run-nim');
 nimRunbtn.addEventListener('click', event => {
     const n = getN();
-    loadWasm('/fib-nim-wasm.wasm', '/fib-nim-wasm.js', n)
+    loadWasm('${baseurl}/fib-nim-wasm.wasm', '${baseurl}/fib-nim-wasm.js', n)
         .then(script => {
             benchmarkMain('Nim', n, script); 
         });
