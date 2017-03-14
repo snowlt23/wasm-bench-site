@@ -11,17 +11,7 @@ function appendBenchResult(language, n, elapsed) {
     benchCount += 1;
 }
 
-function benchmarkMain(language, n, script) {
-    const start = Date.now();
-    script.addEventListener('load', () => {
-        const end = Date.now();
-        const elapsed = (end - start) / 1000;
-        appendBenchResult(language, n, elapsed);
-    });
-    document.body.appendChild(script);
-}
-
-function loadWasm(wasmurl, jsurl, n) {
+function loadWasm(wasmurl, jsurl) {
     return new Promise((resolve, reject) => {
         window.Module = {
             preRun: [],
@@ -32,7 +22,7 @@ function loadWasm(wasmurl, jsurl, n) {
             printErr: (text) => {
                 console.log(text);
             },
-            arguments: [n]
+            arguments: [getN()]
         };
         const xhr = new XMLHttpRequest();
         xhr.open('GET', wasmurl, true);
@@ -45,6 +35,47 @@ function loadWasm(wasmurl, jsurl, n) {
         };
         xhr.send(null);
     });
+}
+
+function benchmarkScript(language, script) {
+    return new Promise((resolve, reject) => {
+        const n = getN();
+        const start = Date.now();
+        script.addEventListener('load', () => {
+            const end = Date.now();
+            const elapsed = (end - start) / 1000;
+            appendBenchResult(language, n, elapsed);
+            resolve();
+        });
+        document.body.appendChild(script);
+    });
+}
+
+function benchmarkJSFib() {
+    return new Promise((resolve, reject) => {
+        const n = getN();
+        const start = Date.now();
+        console.log(`fibonacci(${n}) = ${fibonacci(n)}`);
+        const end = Date.now();
+        const elapsed = (end - start) / 1000;
+        appendBenchResult("JavaScript", n, elapsed);
+        resolve();
+    });
+}
+
+function benchmarkCFib() {
+    return loadWasm('${baseurl}/fib-c-wasm.wasm', '${baseurl}/fib-c-wasm.js')
+        .then(script => benchmarkScript('C', script));
+}
+
+function benchmarkRustFib() {
+    return loadWasm('${baseurl}/fib-rust-wasm.wasm', '${baseurl}/fib-rust-wasm.js')
+        .then(script => benchmarkScript('Rust', script));
+}
+
+function benchmarkNimFib() {
+    return loadWasm('${baseurl}/fib-nim-wasm.wasm', '${baseurl}/fib-nim-wasm.js')
+        .then(script => benchmarkScript('Nim', script));
 }
 
 function getN() {
@@ -61,37 +92,28 @@ function fibonacci(n) {
 
 const jsRunbtn = document.getElementById('run-js');
 jsRunbtn.addEventListener('click', event => {
-    const n = getN();
-    const start = Date.now();
-    console.log(`fibonacci(${n}) = ${fibonacci(n)}`);
-    const end = Date.now();
-    const elapsed = (end - start) / 1000;
-    appendBenchResult("JS", n, elapsed);
+    benchmarkJSFib();
 });
 
 const cRunbtn = document.getElementById('run-c');
 cRunbtn.addEventListener('click', event => {
-    const n = getN();
-    loadWasm('${baseurl}/fib-c-wasm.wasm', '${baseurl}/fib-c-wasm.js', n)
-        .then(script => {
-            benchmarkMain('C', n, script); 
-        });
+    benchmarkCFib();
 });
 
 const rustRunbtn = document.getElementById('run-rust');
 rustRunbtn.addEventListener('click', event => {
-    const n = getN();
-    loadWasm('${baseurl}/fib-rust-wasm.wasm', '${baseurl}/fib-rust-wasm.js', n)
-        .then(script => {
-            benchmarkMain('Rust', n, script); 
-        });
+    benchmarkRustFib();
 });
 
 const nimRunbtn = document.getElementById('run-nim');
 nimRunbtn.addEventListener('click', event => {
-    const n = getN();
-    loadWasm('${baseurl}/fib-nim-wasm.wasm', '${baseurl}/fib-nim-wasm.js', n)
-        .then(script => {
-            benchmarkMain('Nim', n, script); 
-        });
+    benchmarkNimFib();
+});
+
+const allRunbtn = document.getElementById('run-all');
+allRunbtn.addEventListener('click', event => {
+    benchmarkJSFib()
+        .then(benchmarkCFib)
+        .then(benchmarkRustFib)
+        .then(benchmarkNimFib);
 });

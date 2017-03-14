@@ -22,33 +22,35 @@
       </div>
     </nav>
     <div class="container">
-      <div class="row justify-content-center">
-        <button id="run-js" class="btn btn-success">Run JavaScript fib</button>
-        <button id="run-c" class="btn btn-primary">Run C WASM fib</button>
-        <button id="run-rust" class="btn btn-danger">Run Rust WASM fib</button>
-        <button id="run-nim" class="btn btn-warning">Run Nim WASM fib</button>
-      </div>
-      <div class="row justify-content-center">
-        <form class="form-inline">
-          <div class="form-group">
-            <div class="input-group col-sm-10">
-              <span class="input-group-addon">N=</span>
-              <input type="text" id="n-number" class="form-control" placeholder="N" value="45">
+      <div class="row">
+        <div class="container col-sm-3">
+          <button id="run-all" class="btn btn-info">Run ALL fib</button>
+          <button id="run-js" class="btn btn-success">Run JavaScript fib</button>
+          <button id="run-c" class="btn btn-primary">Run C WASM fib</button>
+          <button id="run-rust" class="btn btn-danger">Run Rust WASM fib</button>
+          <button id="run-nim" class="btn btn-warning">Run Nim WASM fib</button>
+          
+          <form class="form-inline">
+            <div class="form-group">
+              <div class="input-group col-sm-10">
+                <span class="input-group-addon">N=</span>
+                <input type="text" id="n-number" class="form-control" placeholder="N" value="45">
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
+        <div class="row col-xs-7">
+          <table class="table">
+            <thread>
+              <th>#</th>
+              <th>Language</th>
+              <th>N</th>
+              <th>Elapsed</th>
+            </thread>
+            <tbody id="result-table">
+            </tbody>
+          </table>
       </div>
-      <div class="row justify-content-center col-xs-6">
-        <table class="table">
-          <thread>
-            <th>#</th>
-            <th>Language</th>
-            <th>N</th>
-            <th>Elapsed</th>
-          </thread>
-          <tbody id="result-table">
-          </tbody>
-        </table>
       </div>
     </div>
     <script src="${baseurl}/main.js"></script>

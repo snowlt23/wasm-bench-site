@@ -2,7 +2,7 @@
 import jester, asyncdispatch
 
 settings:
-  staticDir = "./docs"
+  staticDir = "./dist"
 
 routes:
   discard
